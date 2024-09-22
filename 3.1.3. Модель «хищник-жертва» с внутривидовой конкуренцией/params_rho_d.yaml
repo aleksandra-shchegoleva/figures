@@ -1,0 +1,15 @@
+alpha1: 0.0625
+alpha2: 0.1223
+beta1: 0.1046
+beta2: 0.0065
+gamma1: 0.001
+gamma2: 0.001
+T: 5
+N: 100
+h: 0.01
+x:
+  - 5
+  - 10
+rho: 5
+d: 70
+type_goal: rho_d

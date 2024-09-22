@@ -1,0 +1,16 @@
+r: 2
+K: 108
+alpha: 0.7
+beta: 0.6
+mu: 0.3654
+gamma: 5
+theta: 0.2
+T: 5
+N: 800
+h: 0.01
+x:
+  - 5
+  - 10
+type_goal: rho_d
+rho: 5
+d: 70
