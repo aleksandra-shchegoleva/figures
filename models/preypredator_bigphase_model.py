@@ -58,16 +58,18 @@ class PreyPredatorBigPhaseModel(AbstractModel):
             self.x = np.vstack((self.x, [x1, x2]))
             self.alpha1.append(x3)
 
-        return self.x, u
+        return self.x, self.alpha1
 
-    def plot(self, x: List[List[float]], u: List[float], **kwargs) -> NoReturn:
+    def plot(self, x: List[List[float]], alpha1: List[float], **kwargs) -> NoReturn:
         plt.figure(figsize=(10, 7))
+        plt.grid()
         plt.plot(self.M, x[:, 0], 'g', label=r'$x_{1}$')
         plt.plot(self.M, x[:, 1], 'b', label=r'$x_{2}$')
         plt.plot(self.M, kwargs['x1c'] * np.ones(len(self.M)), 'k--', label=r"$x_{1}^{*}$")
         sns.set_style('whitegrid')
         plt.xlim(0, self.N)
-        plt.legend(loc="upper right")
+        plt.ylim(0)
+        plt.legend(loc="best")
         plt.xlabel('Время, дни')
         plt.ylabel('Популяция, ед/л')
 
@@ -77,10 +79,10 @@ class PreyPredatorBigPhaseModel(AbstractModel):
             plt.savefig(f"{kwargs['name_fig1']}.eps")
 
         plt.figure(figsize=(10, 7))
-        plt.plot(self.M, u, 'g', label=r'$u(t)$')
+        plt.plot(self.M, alpha1, 'k', label=r'$u(t)$')
         sns.set_style('whitegrid')
         plt.xlim(0, self.N)
-        plt.legend(loc="upper right")
+        plt.legend(loc="best")
         plt.xlabel('Время, дни')
         plt.ylabel('Управление')
         
@@ -88,5 +90,50 @@ class PreyPredatorBigPhaseModel(AbstractModel):
             plt.savefig(f"{kwargs['name_fig2']}.png")
             plt.savefig(f"{kwargs['name_fig2']}.svg")
             plt.savefig(f"{kwargs['name_fig2']}.eps")
+
+        plt.figure(figsize=(10, 7))
+        plt.plot(self.x[0, 0], self.x[0, 1], 'bo', label="Начальное состояние")
+        plt.plot(self.x[-1, 0], self.x[-1, 1], 'ro', label='Конечное состояние')
+        plt.plot(self.x[:, 0], self.x[:, 1], 'r-', linewidth=3)
+        plt.legend(loc="best")
+        plt.xlabel(r'$x_{1}$')
+        plt.ylabel(r'$x_{2}$')
+        plt.xlim(left=min(self.x[:, 0]))
+        plt.ylim(bottom=0)
+
+        if "save_fig" in kwargs:
+            plt.savefig(f"{kwargs['name_fig3']}а.png")
+            plt.savefig(f"{kwargs['name_fig3']}а.svg")
+            plt.savefig(f"{kwargs['name_fig3']}а.eps")
+
+        plt.figure(figsize=(10, 7))
+        plt.plot(self.x[0, 0], alpha1[0], 'bo', label="Начальное состояние")
+        plt.plot(self.x[-1, 0], alpha1[-1], 'ro', label='Конечное состояние')
+        plt.plot(self.x[:, 0], alpha1, 'r-', linewidth=3)
+        plt.legend(loc="best")
+        plt.xlabel(r'$x_{1}$')
+        plt.ylabel(r'$x_{3}$')
+        plt.xlim(left=min(self.x[:, 0]))
+        plt.ylim(bottom=0)
+
+        if "save_fig" in kwargs:
+            plt.savefig(f"{kwargs['name_fig3']}б.png")
+            plt.savefig(f"{kwargs['name_fig3']}б.svg")
+            plt.savefig(f"{kwargs['name_fig3']}б.eps")
+
+        plt.figure(figsize=(10, 7))
+        plt.plot(self.x[0, 1], alpha1[0], 'bo', label="Начальное состояние")
+        plt.plot(self.x[-1, 1], alpha1[-1], 'ro', label='Конечное состояние')
+        plt.plot(self.x[:, 1], alpha1, 'r-', linewidth=3)
+        plt.legend(loc="best")
+        plt.xlabel(r'$x_{2}$')
+        plt.ylabel(r'$x_{3}$')
+        plt.xlim(left=min(self.x[:, 1]))
+        plt.ylim(bottom=0)
+
+        if "save_fig" in kwargs:
+            plt.savefig(f"{kwargs['name_fig3']}в.png")
+            plt.savefig(f"{kwargs['name_fig3']}в.svg")
+            plt.savefig(f"{kwargs['name_fig3']}в.eps")
 
         plt.show()

@@ -14,6 +14,7 @@ from models import TPPFactory
 
 mpl.rcParams['figure.dpi'] = 300
 plt.rcParams.update({'font.size': 20})
+plt.rcParams['svg.fonttype'] = 'none'
 
 with open("params_x1c.yaml") as stream:
     try:
@@ -40,7 +41,7 @@ model.set_parameters(
     type_goal='x1c'
 )
 x, u = model.calculate(x1c=params['x1c'])
-model.plot(x, u, x1c=params['x1c'], save_fig=True, name_fig1="3.18", name_fig2="3.19")
+model.plot(x, u, x1c=params['x1c'], save_fig=True, name_fig1="3.9а", name_fig2="3.9б", name_fig3="3.11а")
 
 #%%
 """
@@ -58,6 +59,7 @@ from models import TPPFactory
 
 mpl.rcParams['figure.dpi'] = 300
 plt.rcParams.update({'font.size': 20})
+plt.rcParams['svg.fonttype'] = 'none'
 
 with open("params_rho_d.yaml") as stream:
     try:
@@ -83,4 +85,4 @@ model.set_parameters(
     type_goal='rho_d'
 )
 x, u = model.calculate(rho=params['rho'], d=params['d'])
-model.plot(x, u, rho=params['rho'], d=params['d'], save_fig=True, name_fig1="3.21", name_fig2="3.22")
+model.plot(x, u, rho=params['rho'], d=params['d'], save_fig=True, name_fig1="3.10а", name_fig2="3.10б", name_fig3="3.11б")

@@ -14,6 +14,7 @@ from models import PreyPredatorIntrComFactory
 
 mpl.rcParams['figure.dpi'] = 300
 plt.rcParams.update({'font.size': 20})
+plt.rcParams['svg.fonttype'] = 'none'
 
 with open("params_x1c.yaml") as stream:
     try:
@@ -38,7 +39,7 @@ model.set_parameters(
     type_goal='x1c'
 )
 x, u = model.calculate(x1c=params['x1c'])
-model.plot(x, u, x1c=params['x1c'], save_fig=True, name_fig1="3.12", name_fig2="3.13")
+model.plot(x, u, x1c=params['x1c'], save_fig=True, name_fig1="3.6а", name_fig2="3.6б", name_fig3="3.8а")
 
 #%%
 """
@@ -56,6 +57,7 @@ from models import PreyPredatorIntrComFactory
 
 mpl.rcParams['figure.dpi'] = 300
 plt.rcParams.update({'font.size': 20})
+plt.rcParams['svg.fonttype'] = 'none'
 
 with open("params_rho_d.yaml") as stream:
     try:
@@ -80,4 +82,4 @@ model.set_parameters(
     type_goal='rho_d'
 )
 x, u = model.calculate(rho=params['rho'], d=params['d'])
-model.plot(x, u, rho=params['rho'], d=params['d'], save_fig=True, name_fig1="3.15", name_fig2="3.16")
+model.plot(x, u, rho=params['rho'], d=params['d'], save_fig=True, name_fig1="3.7а", name_fig2="3.7б", name_fig3="3.8б")

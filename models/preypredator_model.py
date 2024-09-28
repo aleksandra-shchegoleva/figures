@@ -62,20 +62,38 @@ class PreyPredatorModel(AbstractModel):
 
         return self.x, u
 
-    def plot(self, x: List[List[float]], u: List[float], **kwargs) -> NoReturn:
+    def plot(self, x: List[List[float]], u: List[float], **kwargs) -> NoReturn:        
         plt.figure(figsize=(10, 7))
+        plt.grid(visible=True)
         plt.plot(self.M, x[:, 0], 'g', label=r'$x_{1}$')
         plt.plot(self.M, x[:, 1], 'b', label=r'$x_{2}$')
+
+        v = np.linspace(round(np.min(self.x[:, 0])) - 5, round(np.max(self.x[:, 0])) + 10, 10)
+        y = np.linspace(round(np.min(self.x[:, 0])) - 5, round(np.max(self.x[:, 1])) + 10, 10)
+        X, Y = np.meshgrid(v, y)
+
         if "x1c" in kwargs:
             plt.plot(self.M, kwargs['x1c'] * np.ones(len(self.M)), 'k--', label=r"$x_{1}^{*}$")
+
+            psi = X - kwargs['x1c']
+            U = -psi / (self.T * X) + self.beta1 * Y
+            Xdot = U * X - self.beta1 * X * Y
+            Ydot = -self.alpha2 * Y + self.beta2 * X * Y 
         elif "rho" in kwargs and "d" in kwargs:
             x1s = self.alpha2 / self.beta2
             x2s = (-self.alpha2 + self.beta2 * kwargs['d']) / (kwargs['rho'] * self.beta2)
-            plt.plot(self.M, x1s * np.ones(len(self.M)), 'k--', label=r"$x_{1*}$")
-            plt.plot(self.M, x2s * np.ones(len(self.M)), 'k--', label=r"$x_{2*}$")
+            plt.plot(self.M, x1s * np.ones(len(self.M)), 'k-.', label=r"$x_{1}^{*}$")
+            plt.plot(self.M, x2s * np.ones(len(self.M)), 'k--', label=r"$x_{2}^{*}$")
+
+            psi = X + kwargs['rho'] * Y - kwargs['d']
+            Ydot = -self.alpha2 * Y + self.beta2 * X * Y
+            U = (self.T * self.beta1 * X * Y - self.T*kwargs['rho']*Ydot - psi) * (self.T * X) ** (-1)
+            Xdot = U * X - self.beta1 * X * Y 
+
+        plt.ylim(bottom=0)
         sns.set_style('whitegrid')
         plt.xlim(0, self.N)
-        plt.legend(loc="upper right")
+        plt.legend(loc="best")
         plt.xlabel('Время, дни')
         plt.ylabel('Популяция, ед/л')
 
@@ -85,7 +103,7 @@ class PreyPredatorModel(AbstractModel):
             plt.savefig(f"{kwargs['name_fig1']}.eps")
 
         plt.figure(figsize=(10, 7))
-        plt.plot(self.M, u, 'g', label=r'$u(t)$')
+        plt.plot(self.M, u, 'k', label=r'$u(t)$')
         sns.set_style('whitegrid')
         plt.xlim(0, self.N)
         plt.legend(loc="upper right")
@@ -96,5 +114,21 @@ class PreyPredatorModel(AbstractModel):
             plt.savefig(f"{kwargs['name_fig2']}.png")
             plt.savefig(f"{kwargs['name_fig2']}.svg")
             plt.savefig(f"{kwargs['name_fig2']}.eps")
+
+        plt.figure(figsize=(10, 7))
+        plt.streamplot(X, Y, Xdot, Ydot)
+        plt.plot(self.x[0, 0], self.x[0, 1], 'bo', label="Начальное состояние")
+        plt.plot(self.x[-1, 0], self.x[-1, 1], 'ro', label='Конечное состояние')
+        plt.plot(self.x[:, 0], self.x[:, 1], 'r-', linewidth=3)
+        plt.legend(loc="lower right")
+        plt.xlabel(r'$x_{1}$')
+        plt.ylabel(r'$x_{2}$')
+        plt.xlim(left=min(self.x[:, 0]))
+        plt.ylim(bottom=0)
+
+        if "save_fig" in kwargs:
+            plt.savefig(f"{kwargs['name_fig3']}.png")
+            plt.savefig(f"{kwargs['name_fig3']}.svg")
+            plt.savefig(f"{kwargs['name_fig3']}.eps")
 
         plt.show()

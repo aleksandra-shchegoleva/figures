@@ -38,19 +38,19 @@ class PreyPredatorNAS(AbstractModel):
         self.M = np.arange(0, N, h)
         self.N = N
         self.h = h
-        self.x = np.empty((0, 2), dtype=np.float32)
+        self.x = np.empty((0, 2), dtype=np.float16)
         self.x = np.vstack((self.x, x))
         self.type_goal = type_goal
 
     def calculate(self, **kwargs) -> Tuple[List[float], List[float]]:
         u = [0]
-        xi = self.sigma * np.random.randn(len(self.M))
+        xi = np.random.normal(loc=0, scale=self.sigma, size=len(self.M))
         
         # first step
         psi = [self.x[0, 0] - kwargs['x1c']]
         f1 = u[0] * self.x[0, 0] - self.beta1 * self.x[0, 0] * self.x[0, 1]
         f2 = -self.alpha2 * self.x[0, 1] + self.beta2 * self.x[0, 0] * self.x[0, 1]
-        x1 = self.x[0, 0] + self.h * f1 + xi[1] + self.c * xi[0]
+        x1 = self.x[0, 0] + self.h * (f1  + xi[1] + self.c * xi[0])
         x2 = self.x[0, 1] + self.h * f2
         self.x = np.vstack((self.x, [x1, x2]))
         psi.append(self.x[1, 0] - kwargs['x1c'])
@@ -64,12 +64,12 @@ class PreyPredatorNAS(AbstractModel):
                 u.append((-psi[i] * (1 + self.T) - self.c * (psi[i] + self.T * psi[i - 1])) / (self.h * self.x[i, 0]) + self.beta1 * self.x[i, 1])
 
             elif self.type_goal == "rho_d":
-                f1 = self.r * self.x[i, 0] * (1 - self.x[i, 0] / self.K) - self.alpha * TPP.f(self.x[i, 0], self.gamma) * self.x[i, 1] + u[i]
+                f1 = self.r * self.x[i, 0] * (1 - self.x[i, 0] / self.K) - self.alpha * TPP.f(self.x[i, 0], self.gamma) * self.x[i, 1] + u[i] 
                 f2 = self.beta * TPP.f(self.x[i, 0], self.gamma) * self.x[i, 1] - self.mu * self.x[i, 1] - self.theta * TPP.f(self.x[i, 0], self.gamma) * self.x[i, 1]
                 psi = self.x[i, 0] + kwargs['rho'] * self.x[i, 1] - kwargs['d']
                 u.append(-psi / self.T - kwargs['rho']*f2 - self.r * self.x[i, 0] * (1 - self.x[i, 0] / self.K) + self.alpha * TPP.f(self.x[i, 0], self.gamma) * self.x[i, 1])
 
-            x1 = self.x[i, 0] + self.h * f1 + xi[i + 1] + self.c * xi[i]
+            x1 = self.x[i, 0] + self.h * (f1 + xi[i + 1] + self.c * xi[i])
             x2 = self.x[i, 1] + self.h * f2
             self.x = np.vstack((self.x, [x1, x2]))
 
