@@ -92,13 +92,13 @@ class PreyPredatorBigPhaseModel(AbstractModel):
             plt.savefig(f"{kwargs['name_fig2']}.eps")
 
         plt.figure(figsize=(10, 7))
-        plt.plot(self.x[0, 0], self.x[0, 1], 'bo', label="Начальное состояние")
-        plt.plot(self.x[-1, 0], self.x[-1, 1], 'ro', label='Конечное состояние')
-        plt.plot(self.x[:, 0], self.x[:, 1], 'r-', linewidth=3)
+        plt.plot(self.x[0, 0], self.x[0, 1], 'bo', zorder=3, label="Начальное состояние")
+        plt.plot(self.x[-1, 0], self.x[-1, 1], 'ro', zorder=2, label='Конечное состояние')
+        plt.plot(self.x[:, 0], self.x[:, 1], 'r-', zorder=1, linewidth=3)
         plt.legend(loc="best")
         plt.xlabel(r'$x_{1}$')
         plt.ylabel(r'$x_{2}$')
-        plt.xlim(left=min(self.x[:, 0]))
+        plt.xlim(left=0)
         plt.ylim(bottom=0)
 
         if "save_fig" in kwargs:
@@ -107,13 +107,13 @@ class PreyPredatorBigPhaseModel(AbstractModel):
             plt.savefig(f"{kwargs['name_fig3']}а.eps")
 
         plt.figure(figsize=(10, 7))
-        plt.plot(self.x[0, 0], alpha1[0], 'bo', label="Начальное состояние")
-        plt.plot(self.x[-1, 0], alpha1[-1], 'ro', label='Конечное состояние')
-        plt.plot(self.x[:, 0], alpha1, 'r-', linewidth=3)
+        plt.plot(self.x[0, 0], alpha1[0], 'bo', zorder=3, label="Начальное состояние")
+        plt.plot(self.x[-1, 0], alpha1[-1], 'ro', zorder=2, label='Конечное состояние')
+        plt.plot(self.x[:, 0], alpha1, 'r-', zorder=1, linewidth=3)
         plt.legend(loc="best")
         plt.xlabel(r'$x_{1}$')
         plt.ylabel(r'$x_{3}$')
-        plt.xlim(left=min(self.x[:, 0]))
+        plt.xlim(left=0)
         plt.ylim(bottom=0)
 
         if "save_fig" in kwargs:
@@ -122,13 +122,13 @@ class PreyPredatorBigPhaseModel(AbstractModel):
             plt.savefig(f"{kwargs['name_fig3']}б.eps")
 
         plt.figure(figsize=(10, 7))
-        plt.plot(self.x[0, 1], alpha1[0], 'bo', label="Начальное состояние")
-        plt.plot(self.x[-1, 1], alpha1[-1], 'ro', label='Конечное состояние')
-        plt.plot(self.x[:, 1], alpha1, 'r-', linewidth=3)
+        plt.plot(self.x[0, 1], alpha1[0], 'bo', zorder=3, label="Начальное состояние")
+        plt.plot(self.x[-1, 1], alpha1[-1], 'ro', zorder=2, label='Конечное состояние')
+        plt.plot(self.x[:, 1], alpha1, 'r-', zorder=1, linewidth=3)
         plt.legend(loc="best")
         plt.xlabel(r'$x_{2}$')
         plt.ylabel(r'$x_{3}$')
-        plt.xlim(left=min(self.x[:, 1]))
+        plt.xlim(left=0)
         plt.ylim(bottom=0)
 
         if "save_fig" in kwargs:
