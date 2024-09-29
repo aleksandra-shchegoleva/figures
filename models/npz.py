@@ -96,8 +96,9 @@ class NPZModel(AbstractModel):
             plt.plot(self.M, x3s * np.ones(len(self.M)), 'k:', label=r"$x_{3}^{*}$")
         sns.set_style('whitegrid')
         plt.xlim(0, self.N)
-        plt.ylim(0)
-        plt.legend(loc="best")
+        plt.ylim(min(0, round(0.2*np.floor(round(np.min(x)/ 0.2,2)),1)))
+        # plt.legend(loc="best")
+        plt.legend(loc="upper right")
         plt.xlabel('Время, дни')
         plt.ylabel('Популяция, ед/л')
 
@@ -120,13 +121,15 @@ class NPZModel(AbstractModel):
             plt.savefig(f"{kwargs['name_fig2']}.eps")
 
         plt.figure(figsize=(10, 7))
-        plt.plot(self.x[0, 0], self.x[0, 1], 'bo', label="Начальное состояние")
-        plt.plot(self.x[-1, 0], self.x[-1, 1], 'ro', label='Конечное состояние')
-        plt.plot(self.x[:, 0], self.x[:, 1], 'r-', linewidth=3)
+        plt.plot(self.x[0, 0], self.x[0, 1], 'bo', zorder=3, label="Начальное состояние")
+        plt.plot(self.x[-1, 0], self.x[-1, 1], 'ro', zorder=2, label='Конечное состояние')
+        plt.plot(self.x[:, 0], self.x[:, 1], 'r-', zorder=1, linewidth=3)
         plt.legend(loc="lower right")
         plt.xlabel(r'$x_{1}$')
         plt.ylabel(r'$x_{2}$')
-        plt.xlim(left=min(self.x[:, 0]))
+        # округляем до ближайшего меньшего значения, кратного 0.2; 
+        # из-за неточного представления чисел с плавающей запятой используем двойное округление, чтобы избежать появления значений 0.5(9) вместо 0.6 или 9.600000000000001 вместо 9.6
+        plt.xlim(left=min(0,round(0.2*np.floor(round(min(self.x[:, 0])/ 0.2,2)),1)))
         plt.ylim(bottom=0)
 
         if "save_fig" in kwargs:
@@ -135,13 +138,13 @@ class NPZModel(AbstractModel):
             plt.savefig(f"{kwargs['name_fig3']}а.eps")
 
         plt.figure(figsize=(10, 7))
-        plt.plot(self.x[0, 1], self.x[0, 2], 'bo', label="Начальное состояние")
-        plt.plot(self.x[-1, 1], self.x[-1, 2], 'ro', label='Конечное состояние')
-        plt.plot(self.x[:, 1], self.x[:, 2], 'r-', linewidth=3)
+        plt.plot(self.x[0, 1], self.x[0, 2], 'bo', zorder=3, label="Начальное состояние")
+        plt.plot(self.x[-1, 1], self.x[-1, 2], 'ro', zorder=2, label='Конечное состояние')
+        plt.plot(self.x[:, 1], self.x[:, 2], 'r-', zorder=1, linewidth=3)
         plt.legend(loc="lower right")
         plt.xlabel(r'$x_{2}$')
         plt.ylabel(r'$x_{3}$')
-        plt.xlim(left=min(self.x[:, 1]))
+        plt.xlim(left=min(0,round(0.2*np.floor(round(min(self.x[:, 1])/ 0.2,2)),1)))
         plt.ylim(bottom=0)
 
         if "save_fig" in kwargs:
@@ -150,13 +153,13 @@ class NPZModel(AbstractModel):
             plt.savefig(f"{kwargs['name_fig3']}б.eps")
 
         plt.figure(figsize=(10, 7))
-        plt.plot(self.x[0, 0], self.x[0, 2], 'bo', label="Начальное состояние")
-        plt.plot(self.x[-1, 0], self.x[-1, 2], 'ro', label='Конечное состояние')
-        plt.plot(self.x[:, 0], self.x[:, 2], 'r-', linewidth=3)
+        plt.plot(self.x[0, 0], self.x[0, 2], 'bo', zorder=3, label="Начальное состояние")
+        plt.plot(self.x[-1, 0], self.x[-1, 2], 'ro', zorder=2, label='Конечное состояние')
+        plt.plot(self.x[:, 0], self.x[:, 2], 'r-', zorder=1, linewidth=3)
         plt.legend(loc="lower right")
         plt.xlabel(r'$x_{1}$')
         plt.ylabel(r'$x_{3}$')
-        plt.xlim(left=min(self.x[:, 0]))
+        plt.xlim(left=min(0,round(0.2*np.floor(round(min(self.x[:, 0])/ 0.2,2)),1)))
         plt.ylim(bottom=0)
 
         if "save_fig" in kwargs:
