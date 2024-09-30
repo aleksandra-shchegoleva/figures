@@ -50,7 +50,7 @@ class PreyPredatorNAS(AbstractModel):
         psi = [self.x[0, 0] - kwargs['x1c']]
         f1 = u[0] * self.x[0, 0] - self.beta1 * self.x[0, 0] * self.x[0, 1]
         f2 = -self.alpha2 * self.x[0, 1] + self.beta2 * self.x[0, 0] * self.x[0, 1]
-        x1 = self.x[0, 0] + self.h * (f1  + xi[1] + self.c * xi[0])
+        x1 = self.x[0, 0] + self.h * f1  + xi[1] + self.c * xi[0]
         x2 = self.x[0, 1] + self.h * f2
         self.x = np.vstack((self.x, [x1, x2]))
         psi.append(self.x[1, 0] - kwargs['x1c'])
@@ -69,7 +69,7 @@ class PreyPredatorNAS(AbstractModel):
                 psi = self.x[i, 0] + kwargs['rho'] * self.x[i, 1] - kwargs['d']
                 u.append(-psi / self.T - kwargs['rho']*f2 - self.r * self.x[i, 0] * (1 - self.x[i, 0] / self.K) + self.alpha * TPP.f(self.x[i, 0], self.gamma) * self.x[i, 1])
 
-            x1 = self.x[i, 0] + self.h * (f1 + xi[i + 1] + self.c * xi[i])
+            x1 = self.x[i, 0] + self.h * f1 + xi[i + 1] + self.c * xi[i]
             x2 = self.x[i, 1] + self.h * f2
             self.x = np.vstack((self.x, [x1, x2]))
 
@@ -84,10 +84,11 @@ class PreyPredatorNAS(AbstractModel):
         if self.type_goal == "rho_d":
             x1s = self.gamma * self.mu / (self.beta - self.mu - self.theta)
             x2s = (kwargs['d'] * self.mu + self.gamma * self.mu + kwargs['d'] * self.theta - self.beta * kwargs['d']) / (self.mu * kwargs['rho'] - self.beta * kwargs['rho'] + kwargs['rho'] * self.theta)
-            plt.plot(self.M, x1s * np.ones(len(self.M)), 'k--', label=r"$x_{1*}$")
+            plt.plot(self.M, x1s * np.ones(len(self.M)), 'k-.', label=r"$x_{1*}$")
             plt.plot(self.M, x2s * np.ones(len(self.M)), 'k--', label=r"$x_{2*}$")
         sns.set_style('whitegrid')
         plt.xlim(0, self.N)
+        plt.ylim(0)
         plt.legend(loc="upper right")
         plt.xlabel('Время, дни')
         plt.ylabel('Популяция, ед/л')
@@ -98,7 +99,7 @@ class PreyPredatorNAS(AbstractModel):
             plt.savefig(f"{kwargs['name_fig1']}.eps")
 
         plt.figure(figsize=(10, 7))
-        plt.plot(self.M, u, 'g', label=r'$u(t)$')
+        plt.plot(self.M, u, 'k', label=r'$u(t)$')
         sns.set_style('whitegrid')
         plt.xlim(0, self.N)
         plt.legend(loc="upper right")

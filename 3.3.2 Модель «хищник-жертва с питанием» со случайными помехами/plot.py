@@ -15,6 +15,7 @@ from models import PreyPredatorNASFactory
 
 mpl.rcParams['figure.dpi'] = 300
 plt.rcParams.update({'font.size': 20})
+plt.rcParams['svg.fonttype'] = 'none'
 np.random.seed(20)
 
 with open("params_x1c.yaml") as stream:
@@ -40,7 +41,7 @@ model.set_parameters(
     type_goal='x1c'
 )
 x, u = model.calculate(x1c=params['x1c'])
-model.plot(x, u, x1c=params['x1c'], save_fig=True, name_fig1="3.24", name_fig2="3.25")
+model.plot(x, u, x1c=params['x1c'], save_fig=True, name_fig1="3.22а", name_fig2="3.22б")
 
 #%%
 """
