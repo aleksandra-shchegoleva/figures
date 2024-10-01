@@ -6,3 +6,4 @@ from .preypredator_nas import PreyPredatorNASFactory
 from .ntp import NTPFactory
 from .npz import NPZFactory
 from .ntp_nas import NTP_NAS_Factory
+from .preypredator_bigphase_nas import PreyPredatorBigPhaseNASFactory
