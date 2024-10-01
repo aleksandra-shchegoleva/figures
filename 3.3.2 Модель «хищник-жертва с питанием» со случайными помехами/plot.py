@@ -59,6 +59,7 @@ from models import TPPFactory
 
 mpl.rcParams['figure.dpi'] = 300
 plt.rcParams.update({'font.size': 20})
+plt.rcParams['svg.fonttype'] = 'none'
 
 with open("params_rho_d.yaml") as stream:
     try:

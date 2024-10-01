@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from typing import List, Tuple, NoReturn
 import numpy as np
 import seaborn as sns
+import random
 
 class PreyPredatorNASFactory(AbstractFactory):
     """
@@ -44,22 +45,21 @@ class PreyPredatorNAS(AbstractModel):
 
     def calculate(self, **kwargs) -> Tuple[List[float], List[float]]:
         u = [0]
-        xi = np.random.normal(loc=0, scale=self.sigma, size=len(self.M))
+        xi = [random.normalvariate(0, self.sigma) for _ in range(len(self.M) + 1)]
+        print(xi)
         
         # first step
         psi = [self.x[0, 0] - kwargs['x1c']]
-        f1 = u[0] * self.x[0, 0] - self.beta1 * self.x[0, 0] * self.x[0, 1]
-        f2 = -self.alpha2 * self.x[0, 1] + self.beta2 * self.x[0, 0] * self.x[0, 1]
-        x1 = self.x[0, 0] + self.h * f1  + xi[1] + self.c * xi[0]
-        x2 = self.x[0, 1] + self.h * f2
-        self.x = np.vstack((self.x, [x1, x2]))
-        psi.append(self.x[1, 0] - kwargs['x1c'])
-        u.append((-psi[1] * (1 + self.T) - self.c * (psi[1] + self.T * psi[0])) / (self.h * self.x[1, 0]) + self.beta1 * self.x[1, 1])
 
-        for i in range(1, len(self.M)-1):
+        for i in range(len(self.M)-1):
             if self.type_goal == "x1c":
                 f1 = u[i] * self.x[i, 0] - self.beta1 * self.x[i, 0] * self.x[i, 1]
                 f2 = -self.alpha2 * self.x[i, 1] + self.beta2 * self.x[i, 0] * self.x[i, 1]
+                x1 = self.x[i, 0] + self.h * f1  + xi[i + 1] + self.c * xi[i]
+                # x1 = self.x[i, 0] + self.h * f1 
+                x2 = self.x[i, 1] + self.h * f2
+                self.x = np.vstack((self.x, [x1, x2]))
+
                 psi.append(self.x[i, 0] - kwargs['x1c'])
                 u.append((-psi[i] * (1 + self.T) - self.c * (psi[i] + self.T * psi[i - 1])) / (self.h * self.x[i, 0]) + self.beta1 * self.x[i, 1])
 
@@ -69,9 +69,9 @@ class PreyPredatorNAS(AbstractModel):
                 psi = self.x[i, 0] + kwargs['rho'] * self.x[i, 1] - kwargs['d']
                 u.append(-psi / self.T - kwargs['rho']*f2 - self.r * self.x[i, 0] * (1 - self.x[i, 0] / self.K) + self.alpha * TPP.f(self.x[i, 0], self.gamma) * self.x[i, 1])
 
-            x1 = self.x[i, 0] + self.h * f1 + xi[i + 1] + self.c * xi[i]
-            x2 = self.x[i, 1] + self.h * f2
-            self.x = np.vstack((self.x, [x1, x2]))
+            # x1 = self.x[i, 0] + self.h * f1 + xi[i + 1] + self.c * xi[i]
+            # x2 = self.x[i, 1] + self.h * f2
+            
 
         return self.x, u
 
@@ -80,7 +80,7 @@ class PreyPredatorNAS(AbstractModel):
         plt.plot(self.M, x[:, 0], 'g', label=r'$x_{1}$')
         plt.plot(self.M, x[:, 1], 'b', label=r'$x_{2}$')
         if self.type_goal == "x1c":
-            plt.plot(self.M, kwargs['x1c'] * np.ones(len(self.M)), 'k--', label=r"$x_{1*}$")
+            plt.plot(self.M, kwargs['x1c'] * np.ones(len(self.M)), 'k--', label=r"$x_{1}^{*}$")
         if self.type_goal == "rho_d":
             x1s = self.gamma * self.mu / (self.beta - self.mu - self.theta)
             x2s = (kwargs['d'] * self.mu + self.gamma * self.mu + kwargs['d'] * self.theta - self.beta * kwargs['d']) / (self.mu * kwargs['rho'] - self.beta * kwargs['rho'] + kwargs['rho'] * self.theta)
@@ -89,7 +89,7 @@ class PreyPredatorNAS(AbstractModel):
         sns.set_style('whitegrid')
         plt.xlim(0, self.N)
         plt.ylim(0)
-        plt.legend(loc="upper right")
+        plt.legend(loc="best")
         plt.xlabel('Время, дни')
         plt.ylabel('Популяция, ед/л')
 
@@ -102,7 +102,7 @@ class PreyPredatorNAS(AbstractModel):
         plt.plot(self.M, u, 'k', label=r'$u(t)$')
         sns.set_style('whitegrid')
         plt.xlim(0, self.N)
-        plt.legend(loc="upper right")
+        plt.legend(loc="best")
         plt.xlabel('Время, дни')
         plt.ylabel('Управление')
         
