@@ -1,12 +1,15 @@
 beta1: 0.1046
+alpha1: 0.1223
 alpha2: 0.1223
 beta2: 0.0065
 c: 0.01
-sigma: 0.0003
+sigma: 0.1
 T: 0.75
-N: 5
+N: 20
 h: 0.1
 x:
   - 5
   - 10
-type_goal: x1c
+type_goal: rho_d
+rho: 5
+d: 70
