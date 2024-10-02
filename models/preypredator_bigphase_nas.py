@@ -132,7 +132,7 @@ class PreyPredatorBigPhaseNAS(AbstractModel):
         plt.plot(self.x[0, 0], self.x[0, 2], 'bo', zorder=3, label="Начальное состояние")
         plt.plot(self.x[-1, 0], self.x[-1, 2], 'ro', zorder=2, label='Конечное состояние')
         plt.plot(self.x[:, 0], self.x[:, 2], 'r-', zorder=1, linewidth=3)
-        plt.legend(loc="upper right")
+        plt.legend(loc="lower left")
         plt.xlabel(r'$x_{1}$')
         plt.ylabel(r'$x_{3}$')
 
@@ -145,7 +145,7 @@ class PreyPredatorBigPhaseNAS(AbstractModel):
         plt.plot(self.x[0, 1], self.x[0, 2], 'bo', zorder=3, label="Начальное состояние")
         plt.plot(self.x[-1, 1], self.x[-1, 2], 'ro', zorder=2, label='Конечное состояние')
         plt.plot(self.x[:, 1], self.x[:, 2], 'r-', zorder=1, linewidth=3)
-        plt.legend(loc="upper right")
+        plt.legend(loc="lower right")
         plt.xlabel(r'$x_{2}$')
         plt.ylabel(r'$x_{3}$')
 
